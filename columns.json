@@ -1,1 +1,1 @@
-[{"field":"TaskID","headerText":"Task ID"},{"field":"TaskName","headerText":"Task Name"},{"field":"StartDate","headerText":"Start Date"},{"field":"Duration","headerText":"Duration"},{"headerText":"test","field":"test"}]
+[{"field":"TaskID","headerText":"Task ID","format":null},{"field":"TaskName","headerText":"Task Name","format":null},{"field":"StartDate","headerText":"Start Date","format":"yMd"},{"headerText":"Duration","field":"Duration","isEdit":false,"format":null}]

@@ -4,8 +4,9 @@ const app = express();
 const bodyParser = require('body-parser');
 const fs = require("fs");
 const cors = require('cors')
-const source = require('./source.json');
+let source = require('./source.json');
 let columns = require('./columns.json');
+const PORT = 8080;
 
 app.use(express.json())
 
@@ -31,9 +32,10 @@ router.get('/columns', (request,response) => {
 
 router.post('/columns', (request,response) => {
   columns.forEach(column => {
-    if (column.field === request.body.field) response.send(500);
+    if (column.headerText === request.body.headerText) response.send(500);
+    if (request.body.isEdit && (column.field === request.body.field)) column.headerText = request.body.headerText;
   });
-  columns.push(request.body);
+  if (!request.body.isEdit) columns.push(request.body);
   fs.writeFile('columns.json', JSON.stringify(columns), function writeJSON(err) {
     if (err) return console.log(err);
     response.send(columns);
@@ -51,12 +53,12 @@ router.post('/deleteColumn', (request,response) => {
 });
 
 router.delete('/file/:id', (request,response) => {
-  source.forEach((item, index) => {
-    if (item.TaskID === request.query.TaskID) source.splice(index, 1);
+  source = source.filter((item, index) => {
+    return item.TaskID !== request.body.TaskID;
   });
   fs.writeFile('source.json', JSON.stringify(source), function writeJSON(err) {
     if (err) return console.log(err);
-    response.send(200);
+    response.send(source);
   });
 });
 
@@ -127,4 +129,5 @@ let sendPartialData = (req, res) => {
 
 app.use("/", router);
 
-app.listen(8080);
+app.listen(PORT);
+console.log('Server listening on port ' + PORT)
